@@ -1,20 +1,37 @@
 package handlers
 
 import (
+	"github.com/VictorMarcolino/first-web-server-go/pkg/config"
 	"github.com/VictorMarcolino/first-web-server-go/pkg/render"
-	"log"
 	"net/http"
 )
 
-func Home(w http.ResponseWriter, r *http.Request) {
-	log.Println("Request to home page")
-	render.RenderTemplate(w, "home.page.gohtml")
+// Repo the repository used by the handlers
+var Repo *Repository
+
+// Repository is the repository type
+type Repository struct {
+	App *config.AppConfig
 }
-func About(w http.ResponseWriter, r *http.Request) {
-	log.Println("Request to About page")
-	render.RenderTemplate(w, "About.page.gohtml")
+
+// NewRepo creates a new repository
+func NewRepo(a *config.AppConfig) *Repository {
+	return &Repository{
+		App: a,
+	}
 }
-func Info(w http.ResponseWriter, r *http.Request) {
-	log.Println("Request to Info page")
-	render.RenderTemplate(w, "Info.page.gohtml")
+
+// NewHandlers sets the repository for the handlers
+func NewHandlers(r *Repository) {
+	Repo = r
+}
+
+// Home is the handler for the home page
+func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "home.page.tmpl")
+}
+
+// About is the handler for the about page
+func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "about.page.tmpl")
 }
